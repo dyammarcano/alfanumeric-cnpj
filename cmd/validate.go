@@ -23,7 +23,7 @@ THE SOFTWARE.
 package cmd
 
 import (
-	"github.com/dyammarcano/cnpj-alfanumerico/internal/cnpj"
+	"github.com/dyammarcano/alfanumeric-cnpj/internal/cnpj"
 	"github.com/spf13/cobra"
 )
 

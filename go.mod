@@ -1,4 +1,4 @@
-module github.com/dyammarcano/cnpj-alfanumerico
+module github.com/dyammarcano/alfanumeric-cnpj
 
 go 1.24
 
