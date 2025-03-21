@@ -19,10 +19,39 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
-package main
 
-import "github.com/dyammarcano/cnpj-alfanumerico/cmd"
+package cmd
 
-func main() {
-	cmd.Execute()
+import (
+	"github.com/dyammarcano/cnpj-alfanumerico/internal/cnpjalfanumerico"
+	"github.com/spf13/cobra"
+)
+
+// validateCmd represents the validate command
+var validateCmd = &cobra.Command{
+	Use:   "validate [CNPJ...]",
+	Short: "Valida um ou mais CNPJs alfanuméricos",
+	Long: `Valida um ou mais CNPJs alfanuméricos, com ou sem máscara.
+
+Exemplos de uso:
+  ./app validate 12.ABC.345/01DE-35
+  ./app validate 00000000000191 ABCDEFGHIJKL80`,
+
+	Run: func(cmd *cobra.Command, args []string) {
+		if len(args) == 0 {
+			cmd.Println("⚠️  Nenhum CNPJ foi informado. Por favor, passe pelo menos um argumento para validação.")
+			return
+		}
+		for i, cnpj := range args {
+			if cnpjalfanumerico.IsValid(cnpj) {
+				cmd.Printf("[%d] ✅ CNPJ válido: %s\n", i+1, cnpj)
+			} else {
+				cmd.Printf("[%d] ❌ CNPJ inválido: %s\n", i+1, cnpj)
+			}
+		}
+	},
+}
+
+func init() {
+	rootCmd.AddCommand(validateCmd)
 }
