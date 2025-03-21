@@ -24,34 +24,32 @@ package cmd
 
 import (
 	"github.com/dyammarcano/cnpj-alfanumerico/internal/cnpj"
+
 	"github.com/spf13/cobra"
 )
 
-// validateCmd represents the validate command
-var validateCmd = &cobra.Command{
-	Use:   "validate [CNPJ...]",
-	Short: "Valida um ou mais CNPJs alfanuméricos",
-	Long: `Valida um ou mais CNPJs alfanuméricos, com ou sem máscara.
+// formatCmd representa o comando 'format'
+var formatCmd = &cobra.Command{
+	Use:   "format [CNPJ...]",
+	Short: "Formata um ou mais CNPJs alfanuméricos",
+	Long: `Formata CNPJs no padrão ##.###.###/####-##, mesmo que estejam sem máscara.
 
 Exemplos de uso:
-  ./app validate 12.ABC.345/01DE-35
-  ./app validate 00000000000191 ABCDEFGHIJKL80`,
-
+  ./app format 90AB1C234D5E91
+  ./app format ABCDEFGHIJKL80 00000000000191`,
 	Run: func(cmd *cobra.Command, args []string) {
 		if len(args) == 0 {
-			cmd.Println("⚠️  Nenhum CNPJ foi informado. Por favor, passe pelo menos um argumento para validação.")
+			cmd.Println("⚠️  Nenhum CNPJ foi informado. Informe pelo menos um valor para formatar.")
 			return
 		}
+
 		for i, valor := range args {
-			if cnpj.IsValid(valor) {
-				cmd.Printf("[%d] ✅  CNPJ válido:   %s\n", i+1, valor)
-			} else {
-				cmd.Printf("[%d] ❌  CNPJ inválido: %s\n", i+1, valor)
-			}
+			formatado := cnpj.FormatCNPJ(valor)
+			cmd.Printf("[%d] 🧾 Original:  %s\n    📎 Formatado: %s\n", i+1, valor, formatado)
 		}
 	},
 }
 
 func init() {
-	rootCmd.AddCommand(validateCmd)
+	rootCmd.AddCommand(formatCmd)
 }

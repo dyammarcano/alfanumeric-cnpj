@@ -1,4 +1,4 @@
-package cnpjalfanumerico
+package cnpj
 
 import (
 	"errors"

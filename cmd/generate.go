@@ -24,7 +24,7 @@ package cmd
 
 import (
 	"fmt"
-	"github.com/dyammarcano/cnpj-alfanumerico/internal/cnpjalfanumerico"
+	"github.com/dyammarcano/cnpj-alfanumerico/internal/cnpj"
 
 	"github.com/spf13/cobra"
 )
@@ -50,21 +50,16 @@ func init() {
 
 func generate() {
 	// Gerando CNPJ válido
-	cnpj := cnpjalfanumerico.GenerateCNPJ()
-	fmt.Println("✅ CNPJ Gerado:", cnpj)
+	valor := cnpj.GenerateCNPJ()
+	fmt.Println("✅  CNPJ Gerado:", valor)
 
 	// Formatando CNPJ
-	fmt.Println("📎 CNPJ Formatado:", cnpjalfanumerico.FormatCNPJ(cnpj))
+	fmt.Println("📎 CNPJ Formatado:", cnpj.FormatCNPJ(valor))
 
 	// Validando CNPJ
-	if cnpjalfanumerico.IsValid(cnpj) {
-		fmt.Println("🔍 Validação: CNPJ gerado é válido ✅")
+	if cnpj.IsValid(valor) {
+		fmt.Println("🔍 Validação: CNPJ gerado é válido ✅ ")
 	} else {
-		fmt.Println("🔍 Validação: CNPJ gerado é inválido ❌")
+		fmt.Println("🔍 Validação: CNPJ gerado é inválido ❌ ")
 	}
-
-	// Teste com um CNPJ inválido (DV corrompido)
-	cnpjInvalido := cnpj[:len(cnpj)-2] + "99"
-	fmt.Println("⚠️  CNPJ Inválido simulado:", cnpjInvalido)
-	fmt.Println("🔍 Validação:", map[bool]string{true: "válido ✅", false: "inválido ❌"}[cnpjalfanumerico.IsValid(cnpjInvalido)])
 }
