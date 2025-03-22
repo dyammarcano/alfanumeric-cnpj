@@ -15,8 +15,8 @@ var (
 	regexCNPJ         = regexp.MustCompile(`^[A-Z\d]{12}\d{2}$`)
 	regexMascara      = regexp.MustCompile(`[./-]`)
 	regexNaoPermitido = regexp.MustCompile(`[^A-Z\d./-]`)
-	cnpjZerado        = "00000000000000"
 	pesosDV           = []int{6, 5, 4, 3, 2, 9, 8, 7, 6, 5, 4, 3, 2}
+	cnpjZerado        = "00000000000000"
 )
 
 func isValidCharSet(value string) bool {
@@ -27,15 +27,35 @@ func removeMascaraCNPJ(value string) string {
 	return strings.ToUpper(regexMascara.ReplaceAllString(value, ""))
 }
 
-func CalculateDV(value string) (string, error) {
-	if !isValidCharSet(value) {
+func CalculateDV(cnpj string) (string, error) {
+	if !isValidCharSet(cnpj) {
 		return "", ErroDVInvalido
 	}
 
-	semMascara := removeMascaraCNPJ(value[:12])
+	semMascara := removeMascaraCNPJ(cnpj)
+	if len(semMascara) == 14 {
+		semMascara = semMascara[:12]
+	}
+
+	if !regexCNPJSemDV.MatchString(semMascara) {
+		return "", ErroDVInvalido
+	}
+
 	if !regexCNPJSemDV.MatchString(semMascara) || semMascara == cnpjZerado[:12] {
 		return "", ErroDVInvalido
 	}
+
+	//// Verifica se há ao menos um caractere alfabético (A–Z)
+	//hasAlpha := false
+	//for _, r := range semMascara {
+	//	if r >= 'A' && r <= 'Z' {
+	//		hasAlpha = true
+	//		break
+	//	}
+	//}
+	//if !hasAlpha {
+	//	return "", fmt.Errorf("o CNPJ deve conter pelo menos um caractere alfabético (A-Z)")
+	//}
 
 	somaDV1, somaDV2, j := 0, 0, 0
 
@@ -68,16 +88,23 @@ func IsValid(cnpj string) bool {
 		return false
 	}
 
+	var dv string
+
 	semMascara := removeMascaraCNPJ(cnpj)
-	if !regexCNPJ.MatchString(semMascara) || semMascara == cnpjZerado {
+	if regexCNPJ.MatchString(semMascara) {
+		dv = semMascara[12:]
+		semMascara = semMascara[:12]
+	}
+
+	if !regexCNPJSemDV.MatchString(semMascara) {
 		return false
 	}
 
-	dvCalculado, err := CalculateDV(semMascara[:12])
+	dvCalculado, err := CalculateDV(semMascara)
 	if err != nil {
 		return false
 	}
-	return semMascara[12:] == dvCalculado
+	return dv == dvCalculado
 }
 
 func FormatCNPJ(value string) string {

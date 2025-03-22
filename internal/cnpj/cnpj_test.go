@@ -26,35 +26,10 @@ func TestCalculateDV(t *testing.T) {
 		}
 
 		if dv != tt.expected {
-			t.Errorf("calculateDV(%s) = %s, expected %s", tt.input, dv, tt.expected)
+			t.Errorf("CalculateDV(%s) = %s, expected %s", tt.input, dv, tt.expected)
 		}
 	}
 }
-
-// TestCalculateDV tests the calculation of the check digit (DV)
-//func TestCalculateDV(t *testing.T) {
-//	tests := []struct {
-//		input    string
-//		expected string
-//	}{
-//		{"000000000001", "91"},
-//		{"12.ABC.345/01DE", "35"},
-//	}
-//
-//	for _, tt := range tests {
-//		dv, err := CalculateDV(UnformattedCNPJ(tt.input))
-//		if err != nil {
-//			t.Error(err)
-//			return
-//		}
-//
-//		if dv != tt.expected {
-//			t.Errorf("calculateDV(%s) = %s, expected %s", tt.input, dv, tt.expected)
-//		}
-//
-//		t.Log(FormatCNPJ(tt.input + dv))
-//	}
-//}
 
 // TestCalculateDV_InvalidCases tests error cases for calculateDV
 func TestCalculateDV_InvalidCases(t *testing.T) {
@@ -66,11 +41,11 @@ func TestCalculateDV_InvalidCases(t *testing.T) {
 		"0123456789A#",   // Invalid character at the end
 		"12ABc34501DE",   // Contains lowercase letters
 		"00000000000",    // Too few digits
-		"00000000000191", // Too many digits
+		"0000000000191",  // Too many digits
 	}
 
 	for _, input := range invalidInputs {
-		_, err := CalculateDV(UnformattedCNPJ(input))
+		_, err := CalculateDV(input)
 		if !errors.Is(err, ErroDVInvalido) {
 			t.Error("expected no error")
 			continue
@@ -96,9 +71,9 @@ func TestValidateCNPJ(t *testing.T) {
 		"ABCDEFGHIJKL80",
 	}
 
-	for _, cnpj := range validCNPJs {
-		if !IsValid(cnpj) {
-			t.Errorf("ValidateCNPJ(%s) should return true, but returned false", cnpj)
+	for _, v := range validCNPJs {
+		if !IsValid(v) {
+			t.Errorf("ValidateCNPJ(%s) should return true, but returned false", v)
 		}
 	}
 }
@@ -122,9 +97,9 @@ func TestValidateCNPJ_Invalid(t *testing.T) {
 		"00.000.000/0000-00", // All zeroes with mask
 	}
 
-	for _, cnpj := range invalidCNPJs {
-		if IsValid(cnpj) {
-			t.Errorf("ValidateCNPJ(%s) should return false, but returned true", cnpj)
+	for _, v := range invalidCNPJs {
+		if IsValid(v) {
+			t.Errorf("ValidateCNPJ(%s) should return false, but returned true", v)
 		}
 	}
 }

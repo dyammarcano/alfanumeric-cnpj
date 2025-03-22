@@ -1,6 +1,7 @@
 # AlfanumericCNPJ
 
-📦 Uma ferramenta de linha de comando em Go para **gerar**, **validar** e **formatar** CNPJs alfanuméricos personalizados.
+📦 Uma ferramenta de linha de comando em Go para **gerar**, **validar** e **formatar** CNPJs alfanuméricos
+personalizados.
 
 ---
 
