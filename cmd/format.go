@@ -35,8 +35,8 @@ var formatCmd = &cobra.Command{
 	Long: `Formata CNPJs no padrão ##.###.###/####-##, mesmo que estejam sem máscara.
 
 Exemplos de uso:
-  ./app format 90AB1C234D5E91
-  ./app format ABCDEFGHIJKL80 00000000000191`,
+  ./app format OTWXQENJDKC620
+  ./app format RZYYOMTNOLSV26 D6RJ1CUTQQAA22`,
 	Run: func(cmd *cobra.Command, args []string) {
 		if len(args) == 0 {
 			cmd.Println("⚠️  Nenhum CNPJ foi informado. Informe pelo menos um valor para formatar.")

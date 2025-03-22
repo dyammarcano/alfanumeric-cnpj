@@ -5,30 +5,56 @@ import (
 	"testing"
 )
 
-// TestCalculateDV tests the calculation of the check digit (DV)
 func TestCalculateDV(t *testing.T) {
 	tests := []struct {
 		input    string
 		expected string
 	}{
-		{"000000000001", "91"},
-		{"12.ABC.345/01DE", "35"},
+		{"TK.10B.O3I/H1GA", "13"},
+		{"PF.0YG.0F8/C4WB", "92"},
+		{"1Q.7ZW.SVW/QR9O", "87"},
+		{"TK10BO3IH1GA", "13"},
+		{"PF0YG0F8C4WB", "92"},
+		{"1Q7ZWSVWQR9O", "87"},
 	}
 
 	for _, tt := range tests {
-		dv, err := CalculateDV(UnformattedCNPJ(tt.input))
+		dv, err := CalculateDV(tt.input)
 		if err != nil {
-			t.Error(err)
+			t.Errorf("CalculateDV(%s) = %s, expected %s, error: %v", tt.input, dv, tt.expected, err)
 			return
 		}
 
 		if dv != tt.expected {
 			t.Errorf("calculateDV(%s) = %s, expected %s", tt.input, dv, tt.expected)
 		}
-
-		t.Log(FormatCNPJ(tt.input + dv))
 	}
 }
+
+// TestCalculateDV tests the calculation of the check digit (DV)
+//func TestCalculateDV(t *testing.T) {
+//	tests := []struct {
+//		input    string
+//		expected string
+//	}{
+//		{"000000000001", "91"},
+//		{"12.ABC.345/01DE", "35"},
+//	}
+//
+//	for _, tt := range tests {
+//		dv, err := CalculateDV(UnformattedCNPJ(tt.input))
+//		if err != nil {
+//			t.Error(err)
+//			return
+//		}
+//
+//		if dv != tt.expected {
+//			t.Errorf("calculateDV(%s) = %s, expected %s", tt.input, dv, tt.expected)
+//		}
+//
+//		t.Log(FormatCNPJ(tt.input + dv))
+//	}
+//}
 
 // TestCalculateDV_InvalidCases tests error cases for calculateDV
 func TestCalculateDV_InvalidCases(t *testing.T) {

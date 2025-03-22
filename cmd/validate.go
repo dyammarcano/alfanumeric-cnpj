@@ -34,8 +34,8 @@ var validateCmd = &cobra.Command{
 	Long: `Valida um ou mais CNPJs alfanuméricos, com ou sem máscara.
 
 Exemplos de uso:
-  ./app validate 12.ABC.345/01DE-35
-  ./app validate 00000000000191 ABCDEFGHIJKL80`,
+  ./app validate OT.WXQ.ENJ/DKC6-20
+  ./app validate RZ.YYO.MTN/OLSV-26 VX7VLX1I5M4X05 RZYYOMTNOLSV26 JJQFNXSNR8FD58 VX.7VL.X1I/5M4X-05`,
 
 	Run: func(cmd *cobra.Command, args []string) {
 		if len(args) == 0 {
@@ -44,9 +44,9 @@ Exemplos de uso:
 		}
 		for i, valor := range args {
 			if cnpj.IsValid(valor) {
-				cmd.Printf("[%d] ✅  CNPJ válido:   %s\n", i+1, valor)
+				cmd.Printf("[%d] ✅  CNPJ válido:   %s\n", i+1, cnpj.FormatCNPJ(valor))
 			} else {
-				cmd.Printf("[%d] ❌  CNPJ inválido: %s\n", i+1, valor)
+				cmd.Printf("[%d] ❌  CNPJ inválido: %s\n", i+1, cnpj.FormatCNPJ(valor))
 			}
 		}
 	},

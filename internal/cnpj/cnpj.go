@@ -27,29 +27,22 @@ func removeMascaraCNPJ(value string) string {
 	return strings.ToUpper(regexMascara.ReplaceAllString(value, ""))
 }
 
-func CalculateDV(cnpj string) (string, error) {
-	if !isValidCharSet(cnpj) {
+func CalculateDV(value string) (string, error) {
+	if !isValidCharSet(value) {
 		return "", ErroDVInvalido
 	}
 
-	semMascara := removeMascaraCNPJ(cnpj)
+	semMascara := removeMascaraCNPJ(value[:12])
 	if !regexCNPJSemDV.MatchString(semMascara) || semMascara == cnpjZerado[:12] {
 		return "", ErroDVInvalido
 	}
 
-	somaDV1 := 0
-	somaDV2 := 0
+	somaDV1, somaDV2, j := 0, 0, 0
+
 	for i := 0; i < 12; i++ {
-		digito := int(semMascara[i] - '0')
-		if digito < 0 || digito > 35 {
-			if semMascara[i] >= 'A' && semMascara[i] <= 'Z' {
-				digito = int(semMascara[i] - 'A' + 10)
-			} else {
-				return "", ErroDVInvalido
-			}
-		}
-		somaDV1 += digito * pesosDV[i+1]
-		somaDV2 += digito * pesosDV[i]
+		somaDV1 += int(rune(semMascara[i])-48) * pesosDV[j+1]
+		somaDV2 += int(rune(semMascara[i])-48) * pesosDV[j]
+		j = (j + 1) % len(pesosDV)
 	}
 
 	dv1 := somaDV1 % 11
