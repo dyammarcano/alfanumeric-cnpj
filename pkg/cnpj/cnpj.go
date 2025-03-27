@@ -132,11 +132,11 @@ func UnformattedCNPJ(value string) string {
 }
 
 func GenerateCNPJ() string {
-	rand.Seed(time.Now().UnixNano())
+	r := rand.New(rand.NewSource(time.Now().UnixNano()))
 	var sb strings.Builder
 	alphabet := "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 	for i := 0; i < 12; i++ {
-		sb.WriteByte(alphabet[rand.Intn(len(alphabet))])
+		sb.WriteByte(alphabet[r.Intn(len(alphabet))])
 	}
 	base := sb.String()
 	dv, err := CalculateDV(base)

@@ -77,7 +77,7 @@ curl -X POST http://localhost:4400/api/cnpj/validate -H "Content-Type: applicati
 	Run: func(cmd *cobra.Command, args []string) {
 		if pgHost == "" || pgUser == "" || pgPassword == "" || pgDatabase == "" {
 			cmd.Println("Erro: é necessário informar --pg-host, --pg-user, --pg-password e --pg-database")
-			cmd.Usage()
+			_ = cmd.Usage()
 			os.Exit(1)
 		}
 
@@ -88,7 +88,9 @@ curl -X POST http://localhost:4400/api/cnpj/validate -H "Content-Type: applicati
 		if err != nil {
 			log.Fatal("Erro ao conectar no banco:", err)
 		}
-		defer db.Close()
+		defer func(db *sql.DB) {
+			_ = db.Close()
+		}(db)
 
 		if err := db.Ping(); err != nil {
 			log.Fatal("Não foi possível pingar o banco:", err)
@@ -176,13 +178,13 @@ func validateHandler(w http.ResponseWriter, r *http.Request) {
 	body, err := io.ReadAll(r.Body)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
-		json.NewEncoder(w).Encode(CNPJResponse{Erro: "request inválido"})
+		_ = json.NewEncoder(w).Encode(CNPJResponse{Erro: "request inválido"})
 		return
 	}
 
 	if err := json.Unmarshal(body, &req); err != nil {
 		w.WriteHeader(http.StatusBadRequest)
-		json.NewEncoder(w).Encode(CNPJResponse{Erro: "JSON inválido"})
+		_ = json.NewEncoder(w).Encode(CNPJResponse{Erro: "JSON inválido"})
 		return
 	}
 
@@ -194,5 +196,5 @@ func validateHandler(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
-	json.NewEncoder(w).Encode(newCNPJResponse)
+	_ = json.NewEncoder(w).Encode(newCNPJResponse)
 }
