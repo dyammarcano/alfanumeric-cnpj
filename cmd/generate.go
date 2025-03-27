@@ -24,7 +24,7 @@ package cmd
 
 import (
 	"fmt"
-	"github.com/dyammarcano/alfanumeric-cnpj/internal/cnpj"
+	"github.com/dyammarcano/alfanumeric-cnpj/pkg/cnpj"
 
 	"github.com/spf13/cobra"
 )

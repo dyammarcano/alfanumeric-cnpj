@@ -28,3 +28,18 @@ go build -o app
 podman run -d --name cnpj-postgres -e POSTGRES_USER=cnpjuser -e POSTGRES_PASSWORD=cnpjpass -e POSTGRES_DB=cnpjdb -p 5432:5432 -v pgdata:/var/lib/postgresql/data docker.io/postgres:15
 app api --pg-host=localhost --pg-port=5432 --pg-user=cnpjuser --pg-password=cnpjpass --pg-database=cnpjdb
 ```
+
+## Use in your code
+```go
+package main
+
+import (
+    "fmt"
+    "github.com/dyammarcano/alfanumeric-cnpj/pkg/cnpj"
+)
+
+func main() {
+    value := cnpj.FormatCNPJ("OTWXQENJDKC620")
+    fmt.Printf("CNPJ: %s, valid: %v",value,cnpj.IsValid(value))
+}
+```

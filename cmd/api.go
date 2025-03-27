@@ -26,7 +26,7 @@ import (
 	"database/sql"
 	"encoding/json"
 	"fmt"
-	"github.com/dyammarcano/alfanumeric-cnpj/internal/cnpj"
+	"github.com/dyammarcano/alfanumeric-cnpj/pkg/cnpj"
 	_ "github.com/lib/pq"
 	"github.com/spf13/cobra"
 	"io"

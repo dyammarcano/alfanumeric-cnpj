@@ -27,12 +27,12 @@ func removeMascaraCNPJ(value string) string {
 	return strings.ToUpper(regexMascara.ReplaceAllString(value, ""))
 }
 
-func CalculateDV(cnpj string) (string, error) {
-	if !isValidCharSet(cnpj) {
+func CalculateDV(value string) (string, error) {
+	if !isValidCharSet(value) {
 		return "", ErroDVInvalido
 	}
 
-	semMascara := removeMascaraCNPJ(cnpj)
+	semMascara := removeMascaraCNPJ(value)
 	if len(semMascara) == 14 {
 		semMascara = semMascara[:12]
 	}
@@ -83,14 +83,14 @@ func CalculateDV(cnpj string) (string, error) {
 	return fmt.Sprintf("%d%d", dv1, dv2), nil
 }
 
-func IsValid(cnpj string) bool {
-	if !isValidCharSet(cnpj) {
+func IsValid(value string) bool {
+	if !isValidCharSet(value) {
 		return false
 	}
 
 	var dv string
 
-	semMascara := removeMascaraCNPJ(cnpj)
+	semMascara := removeMascaraCNPJ(value)
 	if regexCNPJ.MatchString(semMascara) {
 		dv = semMascara[12:]
 		semMascara = semMascara[:12]
